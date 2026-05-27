@@ -1,10 +1,5 @@
-'use client';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import { useAuthStore } from '@/store/authStore';
-import { Loader2 } from 'lucide-react';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -13,25 +8,28 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const setAuth = useAuthStore((state) => state.setAuth);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
 
     if (
-      email === process.env.NEXT_PUBLIC_ADMIN_EMAIL &&
-      password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD
+      email === "admin@gmail.com" &&
+      password === "admin123"
     ) {
-      localStorage.setItem("adminToken", "admin_logged_in");
-      setAuth("admin_logged_in", email);
-      router.push("/admin/dashboard");
-    } else {
-      alert("Invalid credentials");
-      setError("Invalid credentials");
-      setLoading(false);
+      localStorage.setItem(
+        "adminToken",
+        "admin_logged_in"
+      );
+
+      window.location.href =
+        "/admin/dashboard";
+
+      return;
     }
+
+    alert("Invalid credentials");
   };
 
   return (
@@ -48,7 +46,7 @@ export default function AdminLogin() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Email Address

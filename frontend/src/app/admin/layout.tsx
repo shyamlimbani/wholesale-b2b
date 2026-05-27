@@ -17,15 +17,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    const token = localStorage.getItem("adminToken");
+    if (!token && pathname !== '/admin/login') {
+      router.push("/admin/login");
+    }
+  }, [pathname, router]);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (isMounted && !token && pathname !== '/admin/login') {
-      router.push('/admin/login');
-    }
-  }, [isMounted, pathname, router]);
+    setIsMounted(true);
+  }, []);
 
   if (!isMounted) return null;
 
@@ -38,10 +38,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const handleLogout = () => {
     logout();
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('admin-auth');
-    localStorage.removeItem('token');
-    router.push('/admin/login');
+    localStorage.removeItem("adminToken");
+    window.location.href = "/admin/login";
   };
 
   return (
