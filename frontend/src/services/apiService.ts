@@ -537,13 +537,13 @@ export const FooterMenuService = {
 
 export const LeadService = {
   create: async (payload: { name: string; mobile: string }): Promise<any> => {
-    const { data } = await api.post('/leads', payload);
+    const { data } = await api.post('/api/leads', payload);
     return data.lead;
   },
 
   getAll: async (params?: { search?: string }): Promise<Lead[]> => {
     try {
-      const { data } = await api.get('/leads', { params });
+      const { data } = await api.get('/api/leads', { params });
       console.log('Leads API res.data:', data);
       return data.leads || [];
     } catch (e) {
@@ -553,7 +553,7 @@ export const LeadService = {
   },
 
   delete: async (id: string): Promise<void> => {
-    await api.delete(`/leads/${id}`);
+    await api.delete(`/api/leads/${id}`);
   },
 };
 
