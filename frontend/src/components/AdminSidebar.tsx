@@ -75,6 +75,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         <button
           onClick={() => {
             logout();
+            localStorage.removeItem('adminToken');
             localStorage.removeItem('admin-auth');
             localStorage.removeItem('token');
             router.push('/admin/login');

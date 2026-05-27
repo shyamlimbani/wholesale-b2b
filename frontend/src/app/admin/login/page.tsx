@@ -20,17 +20,16 @@ export default function AdminLogin() {
     setError('');
     setLoading(true);
 
-    try {
-      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
-        email,
-        password,
-      });
-
-      setAuth(data.token, data.email);
-      router.push('/admin');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Invalid email or password');
-    } finally {
+    if (
+      email === process.env.NEXT_PUBLIC_ADMIN_EMAIL &&
+      password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD
+    ) {
+      localStorage.setItem("adminToken", "admin_logged_in");
+      setAuth("admin_logged_in", email);
+      router.push("/admin/dashboard");
+    } else {
+      alert("Invalid credentials");
+      setError("Invalid credentials");
       setLoading(false);
     }
   };

@@ -21,10 +21,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, []);
 
   useEffect(() => {
+    const token = localStorage.getItem('adminToken');
     if (isMounted && !token && pathname !== '/admin/login') {
       router.push('/admin/login');
     }
-  }, [token, isMounted, pathname, router]);
+  }, [isMounted, pathname, router]);
 
   if (!isMounted) return null;
 
@@ -32,10 +33,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return <>{children}</>;
   }
 
-  if (!token) return null;
+  const localToken = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
+  if (!localToken) return null;
 
   const handleLogout = () => {
     logout();
+    localStorage.removeItem('adminToken');
     localStorage.removeItem('admin-auth');
     localStorage.removeItem('token');
     router.push('/admin/login');
