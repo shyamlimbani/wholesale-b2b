@@ -6,8 +6,8 @@ export const getImageUrl = (imagePath?: string): string => {
     return imagePath;
   }
   // Convert relative backend path to absolute URL
-  const api_url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-  const backendBase = api_url.endsWith('/api') ? api_url.slice(0, -4) : api_url;
+  const api_url = `${process.env.NEXT_PUBLIC_API_URL}/api`;
+  const backendBase = process.env.NEXT_PUBLIC_API_URL || '';
   const cleanPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
   return `${backendBase}${cleanPath}`;
 };

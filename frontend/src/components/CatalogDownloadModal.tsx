@@ -20,7 +20,7 @@ export default function CatalogDownloadModal({ isOpen, onClose }: CatalogDownloa
     setIsDownloading(true);
     
     // Determine backend URL. Assuming standard NEXT_PUBLIC_API_URL or relative fallback.
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+    const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/api`;
     const downloadUrl = `${baseUrl}/catalog/download/${selectedCategory}`;
 
     try {
