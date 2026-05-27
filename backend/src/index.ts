@@ -25,7 +25,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Import Routes
-import authRoutes from './routes/authRoutes';
+import adminRoutes from './routes/adminRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import productRoutes from './routes/productRoutes';
 import bannerRoutes from './routes/bannerRoutes';
@@ -38,7 +38,7 @@ import leadRoutes from './routes/leadRoutes';
 import popupSettingRoutes from './routes/popupSettingRoutes';
 
 // Use Routes
-app.use('/api/admin', authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/banners', bannerRoutes);

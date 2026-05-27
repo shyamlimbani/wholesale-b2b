@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MONGODB_URI = 'mongodb://localhost:27017/wholesale_b2b';
+const MONGODB_URI = 'mongodb+srv://vivek:vivek123@cluster0.ocwyfzb.mongodb.net/wholesale-b2b?retryWrites=true&w=majority&appName=Cluster0';
 
 async function sanitizeDatabase() {
   try {
