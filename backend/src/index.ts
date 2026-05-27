@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db';
 import { seedPages } from './utils/seedPages';
 
+
 dotenv.config();
 
 const app = express();
