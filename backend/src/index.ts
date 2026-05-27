@@ -13,6 +13,14 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+app.post("/api/admin/login", (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: "ADMIN LOGIN ROUTE WORKING"
+  });
+});
+
 app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB
