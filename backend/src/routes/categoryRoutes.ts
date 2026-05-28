@@ -13,11 +13,11 @@ const router = express.Router();
 
 router.route('/')
   .get(getCategories)
-  .post(protect, upload.single('image'), createCategory);
+  .post(upload.single('image'), createCategory);
 
 router.route('/:id')
   .get(getCategoryById)
-  .put(protect, upload.single('image'), updateCategory)
-  .delete(protect, deleteCategory);
+  .put(upload.single('image'), updateCategory)
+  .delete(deleteCategory);
 
 export default router;

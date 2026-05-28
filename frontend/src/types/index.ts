@@ -126,6 +126,7 @@ export interface PopupSetting {
   description: string;
   logo?: string;
   backgroundImage?: string;
+  image?: string;
   buttonText: string;
   termsText: string;
   isEnabled: boolean;

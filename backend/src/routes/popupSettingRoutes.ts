@@ -8,10 +8,10 @@ const router = express.Router();
 router.route('/')
   .get(getPopupSettings)
   .put(
-    protect,
     upload.fields([
       { name: 'logo', maxCount: 1 },
       { name: 'backgroundImage', maxCount: 1 },
+      { name: 'image', maxCount: 1 },
     ]),
     updatePopupSettings
   );

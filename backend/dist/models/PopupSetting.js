@@ -55,6 +55,10 @@ const popupSettingSchema = new mongoose_1.Schema({
         type: String,
         default: ''
     },
+    image: {
+        type: String,
+        default: ''
+    },
     buttonText: {
         type: String,
         default: 'Explore Wholesale Deals'

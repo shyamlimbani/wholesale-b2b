@@ -22,6 +22,10 @@ const popupSettingSchema = new Schema(
       type: String, 
       default: '' 
     },
+    image: {
+      type: String,
+      default: ''
+    },
     buttonText: { 
       type: String, 
       default: 'Explore Wholesale Deals' 

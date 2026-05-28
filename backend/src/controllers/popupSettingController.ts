@@ -32,6 +32,7 @@ export const updatePopupSettings = asyncWrapper(async (req: Request, res: Respon
     isEnabled,
     logo,
     backgroundImage,
+    image,
   } = req.body;
 
   let settings = await PopupSetting.findOne({});
@@ -50,6 +51,7 @@ export const updatePopupSettings = asyncWrapper(async (req: Request, res: Respon
   // If text urls are sent directly
   if (logo !== undefined) settings.logo = logo;
   if (backgroundImage !== undefined) settings.backgroundImage = backgroundImage;
+  if (image !== undefined) settings.image = image;
 
   // Handle file uploads
   const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
@@ -70,6 +72,15 @@ export const updatePopupSettings = asyncWrapper(async (req: Request, res: Respon
         console.warn('Cloudinary upload failed for backgroundImage, falling back to base64:', err);
         const mimeType = files.backgroundImage[0].mimetype || 'image/png';
         settings.backgroundImage = `data:${mimeType};base64,${files.backgroundImage[0].buffer.toString('base64')}`;
+      }
+    }
+    if (files.image && files.image[0]) {
+      try {
+        settings.image = await uploadToCloudinary(files.image[0].buffer, 'popup_settings');
+      } catch (err) {
+        console.warn('Cloudinary upload failed for image, falling back to base64:', err);
+        const mimeType = files.image[0].mimetype || 'image/png';
+        settings.image = `data:${mimeType};base64,${files.image[0].buffer.toString('base64')}`;
       }
     }
   }

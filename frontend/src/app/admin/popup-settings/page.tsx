@@ -26,6 +26,8 @@ export default function AdminPopupSettings() {
   const [logoUrl, setLogoUrl] = useState('');
   const [backgroundFile, setBackgroundFile] = useState<File | null>(null);
   const [backgroundUrl, setBackgroundUrl] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
     const loadPopupSettings = async () => {
@@ -41,6 +43,7 @@ export default function AdminPopupSettings() {
           setIsEnabled(data.isEnabled ?? true);
           setLogoUrl(data.logo || '');
           setBackgroundUrl(data.backgroundImage || '');
+          setImageUrl(data.image || '');
         }
       } catch (err) {
         console.error('Failed to load popup settings', err);
@@ -71,6 +74,9 @@ export default function AdminPopupSettings() {
     if (backgroundFile) {
       formData.append('backgroundImage', backgroundFile);
     }
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
 
     try {
       await PopupSettingService.update(formData);
@@ -82,12 +88,14 @@ export default function AdminPopupSettings() {
       // Clear files
       setLogoFile(null);
       setBackgroundFile(null);
+      setImageFile(null);
 
       // Reload urls
       const updated = await PopupSettingService.get();
       if (updated) {
         setLogoUrl(updated.logo || '');
         setBackgroundUrl(updated.backgroundImage || '');
+        setImageUrl(updated.image || '');
       }
     } catch (err: any) {
       console.error(err);
@@ -223,7 +231,7 @@ export default function AdminPopupSettings() {
             Media & Graphics
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Logo Slot */}
             <div className="space-y-2">
               <label className="block text-xs font-bold text-gray-700">Popup Logo Image</label>
@@ -261,6 +269,29 @@ export default function AdminPopupSettings() {
                   <Image
                     src={backgroundUrl}
                     alt="Background"
+                    width={150}
+                    height={100}
+                    unoptimized={true}
+                    className="h-20 w-auto object-cover rounded-md"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Foreground Image Slot */}
+            <div className="space-y-2">
+              <label className="block text-xs font-bold text-gray-700">Foreground Image / Illustration</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => e.target.files && setImageFile(e.target.files[0])}
+                className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+              {imageUrl && !imageFile && (
+                <div className="mt-2 p-2 border border-slate-100 bg-slate-50 rounded-xl max-w-[160px] overflow-hidden flex items-center justify-center">
+                  <Image
+                    src={imageUrl}
+                    alt="Foreground Illustration"
                     width={150}
                     height={100}
                     unoptimized={true}

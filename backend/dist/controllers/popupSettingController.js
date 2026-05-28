@@ -35,7 +35,7 @@ exports.getPopupSettings = (0, asyncWrapper_1.default)((req, res) => __awaiter(v
     res.json(settings);
 }));
 exports.updatePopupSettings = (0, asyncWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, subtitle, description, buttonText, termsText, isEnabled, logo, backgroundImage, } = req.body;
+    const { title, subtitle, description, buttonText, termsText, isEnabled, logo, backgroundImage, image, } = req.body;
     let settings = yield PopupSetting_1.default.findOne({});
     if (!settings) {
         settings = new PopupSetting_1.default({});
@@ -58,6 +58,8 @@ exports.updatePopupSettings = (0, asyncWrapper_1.default)((req, res) => __awaite
         settings.logo = logo;
     if (backgroundImage !== undefined)
         settings.backgroundImage = backgroundImage;
+    if (image !== undefined)
+        settings.image = image;
     // Handle file uploads
     const files = req.files;
     if (files) {
@@ -79,6 +81,16 @@ exports.updatePopupSettings = (0, asyncWrapper_1.default)((req, res) => __awaite
                 console.warn('Cloudinary upload failed for backgroundImage, falling back to base64:', err);
                 const mimeType = files.backgroundImage[0].mimetype || 'image/png';
                 settings.backgroundImage = `data:${mimeType};base64,${files.backgroundImage[0].buffer.toString('base64')}`;
+            }
+        }
+        if (files.image && files.image[0]) {
+            try {
+                settings.image = yield (0, cloudinaryUpload_1.uploadToCloudinary)(files.image[0].buffer, 'popup_settings');
+            }
+            catch (err) {
+                console.warn('Cloudinary upload failed for image, falling back to base64:', err);
+                const mimeType = files.image[0].mimetype || 'image/png';
+                settings.image = `data:${mimeType};base64,${files.image[0].buffer.toString('base64')}`;
             }
         }
     }

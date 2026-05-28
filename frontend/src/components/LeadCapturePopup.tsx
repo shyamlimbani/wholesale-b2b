@@ -104,9 +104,14 @@ export default function LeadCapturePopup() {
     ? (logoSrc.includes('?') ? `${logoSrc}&v=${encodeURIComponent(logoBuster)}` : `${logoSrc}?v=${encodeURIComponent(logoBuster)}`)
     : '';
   const bgImg = popupSettings?.backgroundImage || "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1000&auto=format&fit=crop&q=80";
+  const imageSrc = popupSettings?.image;
+  const imageBuster = popupSettings?.updatedAt || Date.now();
+  const versionedImageSrc = imageSrc 
+    ? (imageSrc.includes('?') ? `${imageSrc}&v=${encodeURIComponent(imageBuster)}` : `${imageSrc}?v=${encodeURIComponent(imageBuster)}`)
+    : '';
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-955/80 backdrop-blur-md">
       
       {/* Dynamic Popup Split Card */}
       <div className="bg-white rounded-3xl max-w-4xl w-full shadow-2xl border border-slate-100 flex overflow-hidden relative max-h-[90vh] md:h-[600px]">
@@ -142,6 +147,17 @@ export default function LeadCapturePopup() {
 
           {/* Branding Copy with Glassmorphism */}
           <div className="absolute inset-0 p-10 flex flex-col justify-end text-white space-y-4">
+            {versionedImageSrc && (
+              <div className="flex-1 flex items-center justify-center min-h-0 relative mb-4">
+                <Image
+                  src={versionedImageSrc}
+                  alt="Branding Illustration"
+                  fill
+                  unoptimized={true}
+                  className="object-contain max-h-[220px] rounded-xl"
+                />
+              </div>
+            )}
             <div className="backdrop-blur-md bg-white/10 border border-white/20 p-6 rounded-2xl shadow-lg">
               <h3 className="text-xl font-extrabold tracking-tight leading-snug">
                 {titleText}
