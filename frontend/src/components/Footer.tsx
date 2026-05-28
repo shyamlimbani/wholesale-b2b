@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import Link from 'next/link';
 import { Phone, MapPin, Mail } from 'lucide-react';
 import WhatsAppButton from './WhatsAppButton';
 import Image from 'next/image';
+import api from '../lib/api';
 
 const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
@@ -21,7 +22,20 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 export default function Footer() {
-  const { settings, categories, footerMenus } = useSettings();
+  const { categories, footerMenus } = useSettings();
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await api.get("/api/settings");
+        setSettings(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const socialLinks = settings?.socialLinks || {
     facebook: 'https://facebook.com',
@@ -65,17 +79,14 @@ export default function Footer() {
           {/* Col 1: About, Logo & Socials */}
           <div className="flex flex-col gap-5 md:col-span-2 xl:col-span-2">
             <Link href="/" className="flex items-center gap-2">
-              {settings?.footerLogo ? (
-                <div className="flex items-center justify-start overflow-hidden bg-transparent">
-                  <Image
-                    src={settings.footerLogo.includes('?') ? `${settings.footerLogo}&v=${encodeURIComponent(settings.updatedAt || Date.now())}` : `${settings.footerLogo}?v=${encodeURIComponent(settings.updatedAt || Date.now())}`}
-                    alt={settings?.websiteName || 'Wholesale B2B'}
-                    width={180}
-                    height={60}
-                    unoptimized={true}
-                    className="h-10 w-auto object-contain bg-transparent brightness-0 invert"
-                  />
-                </div>
+              {settings?.logo ? (
+                <Image
+                  src={settings.logo}
+                  alt="logo"
+                  width={120}
+                  height={60}
+                  unoptimized
+                />
               ) : (
                 <span className="font-extrabold text-xl text-white tracking-tight">
                   {settings?.websiteName || 'Wholesale B2B'}
