@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const rawUrl =
   process.env.NEXT_PUBLIC_API_URL ||
-  'https://wholesale-backend-5l3e.onrender.com';
+  'https://wholesale-b2b.onrender.com';
 
 const cleanUrl = rawUrl.endsWith('/')
   ? rawUrl.slice(0, -1)
