@@ -138,7 +138,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const CategoryService = {
   getAll: async (): Promise<Category[]> => {
     try {
-      const { data } = await api.get('/categories');
+      const { data } = await api.get('/api/categories');
       // If backend returns nothing or is empty, use mock
       if (!data || data.length === 0) return localCategories;
       return data;
@@ -150,7 +150,7 @@ export const CategoryService = {
 
   getById: async (id: string): Promise<Category> => {
     try {
-      const { data } = await api.get(`/categories/${id}`);
+      const { data } = await api.get(`/api/categories/${id}`);
       return data;
     } catch (e) {
       const found = localCategories.find((c) => c._id === id);
@@ -161,7 +161,7 @@ export const CategoryService = {
 
   create: async (formData: FormData): Promise<Category> => {
     try {
-      const { data } = await api.post('/categories', formData, {
+      const { data } = await api.post('/api/categories', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return data;
@@ -187,7 +187,7 @@ export const CategoryService = {
 
   update: async (id: string, formData: FormData): Promise<Category> => {
     try {
-      const { data } = await api.put(`/categories/${id}`, formData, {
+      const { data } = await api.put(`/api/categories/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return data;
@@ -214,7 +214,7 @@ export const CategoryService = {
 
   delete: async (id: string): Promise<void> => {
     try {
-      await api.delete(`/categories/${id}`);
+      await api.delete(`/api/categories/${id}`);
     } catch (e) {
       console.warn('Category delete error, deleting locally:', e);
       localCategories = localCategories.filter((c) => c._id !== id);
@@ -228,7 +228,7 @@ export const CategoryService = {
 export const BannerService = {
   getAll: async (params?: { active?: boolean }): Promise<Banner[]> => {
     try {
-      const { data } = await api.get('/banners', {
+      const { data } = await api.get('/api/banners', {
         params: { active: params?.active ? 'true' : 'false' },
       });
       if (!data || data.length === 0) return localBanners.filter(b => !params?.active || b.isActive);
@@ -241,7 +241,7 @@ export const BannerService = {
 
   create: async (payload: Partial<Banner>): Promise<Banner> => {
     try {
-      const { data } = await api.post('/banners', payload);
+      const { data } = await api.post('/api/banners', payload);
       return data;
     } catch (e) {
       console.warn('Banner create error, creating locally:', e);
@@ -262,7 +262,7 @@ export const BannerService = {
 
   update: async (id: string, payload: Partial<Banner>): Promise<Banner> => {
     try {
-      const { data } = await api.put(`/banners/${id}`, payload);
+      const { data } = await api.put(`/api/banners/${id}`, payload);
       return data;
     } catch (e) {
       console.warn('Banner update error, updating locally:', e);
@@ -285,7 +285,7 @@ export const BannerService = {
 
   delete: async (id: string): Promise<void> => {
     try {
-      await api.delete(`/banners/${id}`);
+      await api.delete(`/api/banners/${id}`);
     } catch (e) {
       console.warn('Banner delete error, deleting locally:', e);
       localBanners = localBanners.filter((b) => b._id !== id);
@@ -297,7 +297,7 @@ export const BannerService = {
 export const SettingsService = {
   get: async (): Promise<Settings> => {
     try {
-      const { data } = await api.get('/settings');
+      const { data } = await api.get('/api/settings');
       if (!data) return localSettings;
       return data;
     } catch (e) {
@@ -308,7 +308,7 @@ export const SettingsService = {
 
   update: async (formData: FormData): Promise<Settings> => {
     try {
-      const { data } = await api.put('/settings', formData, {
+      const { data } = await api.put('/api/settings', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return data;
@@ -407,7 +407,7 @@ export const AdminService = {
 export const ProductService = {
   getAll: async (params?: { category?: string; search?: string }): Promise<Product[]> => {
     try {
-      const { data } = await api.get('/products', { params });
+      const { data } = await api.get('/api/products', { params });
       return data;
     } catch (e) {
       return [];
@@ -415,30 +415,30 @@ export const ProductService = {
   },
 
   getById: async (id: string): Promise<Product> => {
-    const { data } = await api.get(`/products/${id}`);
+    const { data } = await api.get(`/api/products/${id}`);
     return data;
   },
 
   create: async (payload: Partial<Product>): Promise<Product> => {
-    const { data } = await api.post('/products', payload);
+    const { data } = await api.post('/api/products', payload);
     return data;
   },
 
   update: async (id: string, payload: Partial<Product>): Promise<Product> => {
-    const { data } = await api.put(`/products/${id}`, payload);
+    const { data } = await api.put(`/api/products/${id}`, payload);
     return data;
   },
 
   delete: async (id: string): Promise<void> => {
-    await api.delete(`/products/${id}`);
+    await api.delete(`/api/products/${id}`);
   },
 
-  exportCsvUrl: `${api.defaults.baseURL || '/api'}/products/export`,
+  exportCsvUrl: `${api.defaults.baseURL || ''}/api/products/export`,
 
   importCsv: async (file: File): Promise<any> => {
     const formData = new FormData();
     formData.append('file', file);
-    const { data } = await api.post('/products/import', formData, {
+    const { data } = await api.post('/api/products/import', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return data;
@@ -448,7 +448,7 @@ export const ProductService = {
 export const PageService = {
   getAll: async (params?: { active?: boolean }): Promise<Page[]> => {
     try {
-      const { data } = await api.get('/pages', {
+      const { data } = await api.get('/api/pages', {
         params: { active: params?.active ? 'true' : 'false' },
       });
       return data;
@@ -458,29 +458,29 @@ export const PageService = {
   },
 
   getBySlug: async (slug: string): Promise<Page> => {
-    const { data } = await api.get(`/pages/${slug}`);
+    const { data } = await api.get(`/api/pages/${slug}`);
     return data;
   },
 
   create: async (payload: Partial<Page>): Promise<Page> => {
-    const { data } = await api.post('/pages', payload);
+    const { data } = await api.post('/api/pages', payload);
     return data;
   },
 
   update: async (id: string, payload: Partial<Page>): Promise<Page> => {
-    const { data } = await api.put(`/pages/${id}`, payload);
+    const { data } = await api.put(`/api/pages/${id}`, payload);
     return data;
   },
 
   delete: async (id: string): Promise<void> => {
-    await api.delete(`/pages/${id}`);
+    await api.delete(`/api/pages/${id}`);
   },
 };
 
 export const NavbarService = {
   getAll: async (params?: { active?: boolean }): Promise<NavbarLink[]> => {
     try {
-      const { data } = await api.get('/navbar', {
+      const { data } = await api.get('/api/navbar', {
         params: { active: params?.active ? 'true' : 'false' },
       });
       return data;
@@ -490,24 +490,24 @@ export const NavbarService = {
   },
 
   create: async (payload: Partial<NavbarLink>): Promise<NavbarLink> => {
-    const { data } = await api.post('/navbar', payload);
+    const { data } = await api.post('/api/navbar', payload);
     return data;
   },
 
   update: async (id: string, payload: Partial<NavbarLink>): Promise<NavbarLink> => {
-    const { data } = await api.put(`/navbar/${id}`, payload);
+    const { data } = await api.put(`/api/navbar/${id}`, payload);
     return data;
   },
 
   delete: async (id: string): Promise<void> => {
-    await api.delete(`/navbar/${id}`);
+    await api.delete(`/api/navbar/${id}`);
   },
 };
 
 export const FooterMenuService = {
   getAll: async (params?: { active?: boolean }): Promise<FooterMenu[]> => {
     try {
-      const { data } = await api.get('/footer-menus', {
+      const { data } = await api.get('/api/footer-menus', {
         params: { active: params?.active ? 'true' : 'false' },
       });
       return data;
@@ -517,21 +517,21 @@ export const FooterMenuService = {
   },
 
   create: async (payload: Partial<FooterMenu>): Promise<FooterMenu> => {
-    const { data } = await api.post('/footer-menus', payload);
+    const { data } = await api.post('/api/footer-menus', payload);
     return data;
   },
 
   update: async (id: string, payload: Partial<FooterMenu>): Promise<FooterMenu> => {
-    const { data } = await api.put(`/footer-menus/${id}`, payload);
+    const { data } = await api.put(`/api/footer-menus/${id}`, payload);
     return data;
   },
 
   delete: async (id: string): Promise<void> => {
-    await api.delete(`/footer-menus/${id}`);
+    await api.delete(`/api/footer-menus/${id}`);
   },
 
   reorder: async (orders: { id: string; order: number }[]): Promise<void> => {
-    await api.put('/footer-menus/reorder', { orders });
+    await api.put('/api/footer-menus/reorder', { orders });
   },
 };
 
@@ -560,7 +560,7 @@ export const LeadService = {
 export const PopupSettingService = {
   get: async (): Promise<PopupSetting> => {
     try {
-      const { data } = await api.get('/popup-settings');
+      const { data } = await api.get('/api/popup-settings');
       return data;
     } catch (e) {
       console.warn('PopupSettings fetch error, returning defaults:', e);
@@ -578,7 +578,7 @@ export const PopupSettingService = {
   },
 
   update: async (formData: FormData): Promise<PopupSetting> => {
-    const { data } = await api.put('/popup-settings', formData, {
+    const { data } = await api.put('/api/popup-settings', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return data;
