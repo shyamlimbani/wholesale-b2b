@@ -31,27 +31,35 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
         navigation={banners.length > 1}
         className="w-full h-full"
       >
-        {banners.map((banner, index) => (
-          <SwiperSlide key={banner._id || index} className="w-full h-full relative cursor-pointer flex items-center justify-center bg-slate-50/50">
-            {banner.link ? (
-              <Link href={banner.link} className="block w-full h-full relative">
-                <img
-                  src={getImageUrl(banner.image)}
-                  alt={`Banner ${index + 1}`}
-                  className="w-full h-full object-contain transition-opacity duration-500"
-                />
-              </Link>
-            ) : (
-              <div className="w-full h-full relative">
-                <img
-                  src={getImageUrl(banner.image)}
-                  alt={`Banner ${index + 1}`}
-                  className="w-full h-full object-contain transition-opacity duration-500"
-                />
-              </div>
-            )}
-          </SwiperSlide>
-        ))}
+        {banners.map((banner, index) => {
+          const imageUrl = getImageUrl(banner.image);
+          const cacheBuster = banner.updatedAt ? banner.updatedAt : Date.now();
+          const versionedSrc = imageUrl.includes('?')
+            ? `${imageUrl}&v=${encodeURIComponent(cacheBuster)}`
+            : `${imageUrl}?v=${encodeURIComponent(cacheBuster)}`;
+
+          return (
+            <SwiperSlide key={banner._id || index} className="w-full h-full relative cursor-pointer flex items-center justify-center bg-slate-50/50">
+              {banner.link ? (
+                <Link href={banner.link} className="block w-full h-full relative">
+                  <img
+                    src={versionedSrc}
+                    alt={`Banner ${index + 1}`}
+                    className="w-full h-full object-contain transition-opacity duration-500"
+                  />
+                </Link>
+              ) : (
+                <div className="w-full h-full relative">
+                  <img
+                    src={versionedSrc}
+                    alt={`Banner ${index + 1}`}
+                    className="w-full h-full object-contain transition-opacity duration-500"
+                  />
+                </div>
+              )}
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
       
       {/* Custom Styles for Swiper Pagination & Navigation to make it look premium */}
