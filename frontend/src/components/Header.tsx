@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import Link from 'next/link';
 import { Menu, X, Search, Grid, ChevronDown, Download, LogIn, LogOut } from 'lucide-react';
@@ -9,6 +9,7 @@ import Image from 'next/image';
 import CatalogDownloadModal from './CatalogDownloadModal';
 import toast from 'react-hot-toast';
 import { getImageUrl } from '../lib/imageHelper';
+import api from '../lib/api';
 
 const getCategoryEmoji = (name: string): string => {
   const n = name.toLowerCase();
@@ -29,7 +30,7 @@ interface HeaderProps {
 }
 
 export default function Header({ onSearch, initialSearch = '', initialCategory = '' }: HeaderProps) {
-  const { settings, categories, navbar, user, logoutUser, setShowLoginPopup } = useSettings();
+  const { categories, navbar, user, logoutUser, setShowLoginPopup } = useSettings();
   const router = useRouter();
 
   const [searchVal, setSearchVal] = useState(initialSearch);
@@ -39,6 +40,21 @@ export default function Header({ onSearch, initialSearch = '', initialCategory =
   const [downloadModalOpen, setDownloadModalOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
+
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await api.get("/api/settings");
+        console.log("SETTINGS API:", response.data);
+        setSettings(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const initials = user && user.name
     ? user.name.split(' ').map((n: string) => n[0]).slice(0, 2).join('').toUpperCase()
@@ -86,16 +102,13 @@ export default function Header({ onSearch, initialSearch = '', initialCategory =
             {/* Logo Section */}
             <Link href="/" className="flex items-center gap-2 shrink-0 select-none">
               {settings?.logo ? (
-                <div className="flex items-center justify-center overflow-hidden bg-transparent">
-                  <Image
-                    src={settings.logo.includes('?') ? `${settings.logo}&v=${encodeURIComponent(settings.updatedAt || Date.now())}` : `${settings.logo}?v=${encodeURIComponent(settings.updatedAt || Date.now())}`}
-                    alt={settings.websiteName || 'My Website'}
-                    width={180}
-                    height={60}
-                    unoptimized={true}
-                    className="h-10 md:h-14 w-auto object-contain bg-transparent"
-                  />
-                </div>
+                <Image
+                  src={settings.logo}
+                  alt="logo"
+                  width={120}
+                  height={60}
+                  unoptimized
+                />
               ) : (
                 <div className="flex items-center gap-2">
                   <div className="bg-[#cc3a07] text-white p-2 rounded-xl shadow-sm">
