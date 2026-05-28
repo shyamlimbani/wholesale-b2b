@@ -13,11 +13,11 @@ const router = express.Router();
 
 router.route('/')
   .get(getBanners)
-  .post(protect, upload.single('image'), createBanner);
+  .post(upload.single('image'), createBanner);
 
 router.route('/:id')
   .get(getBannerById)
-  .put(protect, upload.single('image'), updateBanner)
-  .delete(protect, deleteBanner);
+  .put(upload.single('image'), updateBanner)
+  .delete(deleteBanner);
 
 export default router;
