@@ -8,7 +8,7 @@ const cleanUrl = rawUrl.endsWith('/')
   ? rawUrl.slice(0, -1)
   : rawUrl;
 
-const API_URL = `${cleanUrl}/api`;
+const API_URL = cleanUrl;
 
 const api = axios.create({
   baseURL: API_URL,
