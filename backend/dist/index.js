@@ -14,6 +14,12 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+app.post("/api/admin/login", (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: "ADMIN LOGIN ROUTE WORKING"
+    });
+});
 app.use(express_1.default.urlencoded({ extended: true }));
 // Connect to MongoDB
 (0, db_1.default)().then(() => {
@@ -24,7 +30,7 @@ app.get('/', (req, res) => {
     res.send('Wholesale B2B API is running...');
 });
 // Import Routes
-const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
 const categoryRoutes_1 = __importDefault(require("./routes/categoryRoutes"));
 const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
 const bannerRoutes_1 = __importDefault(require("./routes/bannerRoutes"));
@@ -36,7 +42,7 @@ const footerMenuRoutes_1 = __importDefault(require("./routes/footerMenuRoutes"))
 const leadRoutes_1 = __importDefault(require("./routes/leadRoutes"));
 const popupSettingRoutes_1 = __importDefault(require("./routes/popupSettingRoutes"));
 // Use Routes
-app.use('/api/admin', authRoutes_1.default);
+app.use('/api/admin', adminRoutes_1.default);
 app.use('/api/categories', categoryRoutes_1.default);
 app.use('/api/products', productRoutes_1.default);
 app.use('/api/banners', bannerRoutes_1.default);
