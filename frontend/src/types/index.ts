@@ -66,6 +66,8 @@ export interface Settings {
   footerDescription?: string;
   contactEmail?: string;
   contactAddress?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Page {

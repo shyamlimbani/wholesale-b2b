@@ -97,6 +97,12 @@ export default function LeadCapturePopup() {
   const buttonLabel = popupSettings?.buttonText || "Explore Wholesale Deals";
   const termsLabelText = popupSettings?.termsText || "Verified B2B Business Verification";
   const logoSrc = popupSettings?.logo || settings?.logo;
+  const logoBuster = popupSettings?.logo 
+    ? (popupSettings.updatedAt || Date.now()) 
+    : (settings?.updatedAt || Date.now());
+  const versionedLogoSrc = logoSrc 
+    ? (logoSrc.includes('?') ? `${logoSrc}&v=${encodeURIComponent(logoBuster)}` : `${logoSrc}?v=${encodeURIComponent(logoBuster)}`)
+    : '';
   const bgImg = popupSettings?.backgroundImage || "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1000&auto=format&fit=crop&q=80";
 
   return (
@@ -155,7 +161,7 @@ export default function LeadCapturePopup() {
             {logoSrc ? (
               <div className="mb-4 max-w-[180px] overflow-hidden flex items-center justify-center">
                 <Image
-                  src={logoSrc}
+                  src={versionedLogoSrc}
                   alt={settings?.websiteName || 'B2B Marketplace'}
                   width={180}
                   height={60}

@@ -88,7 +88,7 @@ export default function Header({ onSearch, initialSearch = '', initialCategory =
               {settings?.logo ? (
                 <div className="flex items-center justify-center overflow-hidden bg-transparent">
                   <Image
-                    src={settings.logo}
+                    src={settings.logo.includes('?') ? `${settings.logo}&v=${encodeURIComponent(settings.updatedAt || Date.now())}` : `${settings.logo}?v=${encodeURIComponent(settings.updatedAt || Date.now())}`}
                     alt={settings.websiteName || 'My Website'}
                     width={180}
                     height={60}

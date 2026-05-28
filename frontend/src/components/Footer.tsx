@@ -68,7 +68,7 @@ export default function Footer() {
               {settings?.footerLogo ? (
                 <div className="flex items-center justify-start overflow-hidden bg-transparent">
                   <Image
-                    src={settings.footerLogo}
+                    src={settings.footerLogo.includes('?') ? `${settings.footerLogo}&v=${encodeURIComponent(settings.updatedAt || Date.now())}` : `${settings.footerLogo}?v=${encodeURIComponent(settings.updatedAt || Date.now())}`}
                     alt={settings?.websiteName || 'Wholesale B2B'}
                     width={180}
                     height={60}
